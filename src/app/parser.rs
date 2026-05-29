@@ -23,7 +23,7 @@ pub enum State {
     Invalid,
 }
 
-pub fn parse_command(input: String) -> Result<Command, ParseError> {
+pub fn parse_command(input: &String) -> Result<Command, ParseError> {
     let mut tokens = input.split_whitespace(); //need to change this to only split at the first white space
     let command = tokens.next().ok_or(ParseError::EmptyInput)?.to_string();
     let args = tokens.map(String::from).collect();
