@@ -13,11 +13,12 @@ pub fn render(frame: &mut Frame, app: &App) {
         .direction(ratatui::layout::Direction::Vertical)
         .margin(1)
         .constraints(vec![
-            Constraint::Length(60),
-            Constraint::Percentage(3),
+            Constraint::Percentage(60),
+            Constraint::Length(3),
             Constraint::Length(3),
         ])
         .split(frame.area());
+
     frame.render_widget(
         Paragraph::new("Nothing to see here")
             .block(Block::new().borders(Borders::ALL).title("Result Window"))
