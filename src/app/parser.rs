@@ -30,7 +30,7 @@ pub fn parse_command(input: String) -> Result<Command, ParseError> {
     Ok(Command { command, args })
 }
 
-fn tokenize(input: &str) -> Vec<Token> {
+pub fn tokenize(input: &str) -> Vec<Token> {
     let mut tokens = Vec::new();
     let mut chars = input.chars().peekable();
 
