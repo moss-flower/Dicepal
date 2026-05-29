@@ -1,5 +1,5 @@
 mod command;
-mod errors;
+mod interpreter;
 mod parser;
 
 pub struct AppState {
