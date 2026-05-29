@@ -3,6 +3,7 @@ use crossterm::event::{KeyCode, KeyEvent};
 use crate::app::{command::CommandBar, parser::ParseError};
 
 mod command;
+mod diceroller;
 mod interpreter;
 mod parser;
 
