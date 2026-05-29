@@ -48,7 +48,6 @@ impl App {
                 return;
             }
             KeyCode::Esc => {
-                self.is_in_writing_mode = false;
                 self.command_bar.reset();
                 return;
             }
