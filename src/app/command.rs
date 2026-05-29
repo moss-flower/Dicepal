@@ -4,6 +4,12 @@ pub struct CommandBar {
     pub location_pointer: usize,
 }
 
+#[derive(Debug)]
+pub struct Command {
+    pub command: String,
+    pub args: Vec<String>,
+}
+
 impl CommandBar {
     pub fn append(&mut self, character: char) {
         self.text_field.insert(self.location_pointer, character);
