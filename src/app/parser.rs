@@ -1,3 +1,7 @@
+use std::fmt;
+
+use log::info;
+
 use crate::app::command::Command;
 
 pub enum ParseError {
@@ -12,6 +16,17 @@ pub enum Token {
     Operator(char),
     Number(i32),
     Dice(i32, char, i32),
+}
+
+impl fmt::Display for Token {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Token::Character(c) => write!(f, "{}", c),
+            Token::Number(c) => write!(f, "{}", c),
+            Token::Operator(c) => write!(f, "{}", c),
+            Token::Dice(a, b, c) => write!(f, "{}{}{}", a, b, c),
+        }
+    }
 }
 
 #[derive(Debug, PartialEq)]
@@ -109,6 +124,11 @@ pub fn parse_words(tokens: Vec<Token>) -> Result<Vec<Token>, ParseError> {
         }
         State::CompletedRoll => {}
         _ => return Err(ParseError::SyntaxError("Invalid syntax".into())),
+    }
+
+    info!("Parsed words:");
+    for word in &words {
+        info!("{word}");
     }
 
     return Ok(words);
