@@ -1,10 +1,10 @@
 use std::{
-    fmt::{self, write},
+    fmt::{self},
     io::Error,
 };
 
 use crate::app::{
-    App, AppState,
+    AppState,
     command::Command,
     diceroller,
     interpreter::InterpreterError::DownstreamError,

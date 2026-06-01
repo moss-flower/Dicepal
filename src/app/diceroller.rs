@@ -10,12 +10,26 @@ pub struct Dice {
     size: i32,
 }
 
+impl ToString for Dice {
+    fn to_string(&self) -> String {
+        let string: String = format!("{}d{}", self.count, self.size);
+        string
+    }
+}
+
 #[derive(Default)]
 pub struct Roll {
     pub input: String,
     pub dice: Vec<Dice>,
     pub modifier: i32,
     pub result: i32,
+}
+
+impl ToString for Roll {
+    fn to_string(&self) -> String {
+        let string = format!("{} = {}", self.input, self.result);
+        string
+    }
 }
 
 impl Roll {
