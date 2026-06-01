@@ -42,7 +42,7 @@ pub fn execute(command: Command, app_state: &mut AppState) -> Result<(), Interpr
             app_state.should_quit = true;
             Ok(())
         }
-        "roll" => {
+        "roll" | "r" => {
             let string = command.args.join("");
             let tokens = parser::tokenize(string.as_str());
             let words = parser::parse_words(tokens)?;
