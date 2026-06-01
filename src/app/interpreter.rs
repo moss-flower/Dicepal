@@ -26,12 +26,12 @@ impl fmt::Display for InterpreterError {
 }
 
 impl From<ParseError> for InterpreterError {
-    fn from(value: ParseError) -> Self {
+    fn from(_: ParseError) -> Self {
         DownstreamError
     }
 }
 impl From<Error> for InterpreterError {
-    fn from(value: Error) -> Self {
+    fn from(_: Error) -> Self {
         InterpreterError::DownstreamError
     }
 }
@@ -46,7 +46,9 @@ pub fn execute(command: Command, app_state: &mut AppState) -> Result<(), Interpr
             let string = command.args.join("");
             let tokens = parser::tokenize(string.as_str());
             let words = parser::parse_words(tokens)?;
-            app_state.roll_history.push(diceroller::parse_roll(words)?);
+            app_state
+                .roll_history
+                .push(diceroller::parse_roll(string, words)?);
             Ok(())
         }
 

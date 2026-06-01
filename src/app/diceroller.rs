@@ -48,8 +48,8 @@ impl Dice {
         let mut result = 0;
         let mut rng = rng();
 
-        for _ in 0..self.count - 1 {
-            result += rng.random_range(0..self.size - 1);
+        for _ in 0..self.count {
+            result += rng.random_range(1..self.size);
         }
         result
     }
@@ -61,8 +61,9 @@ enum State {
     Subtract,
 }
 
-pub fn parse_roll(input: Vec<Token>) -> Result<Roll, Error> {
+pub fn parse_roll(message: String, input: Vec<Token>) -> Result<Roll, Error> {
     let mut roll: Roll = Roll::default();
+    roll.input = message;
     let mut state = State::Normal;
 
     for token in input {
@@ -99,6 +100,7 @@ pub fn parse_roll(input: Vec<Token>) -> Result<Roll, Error> {
                 roll.modifier -= a;
                 State::Normal
             }
+            //note: this doesn't work yet. Impossible for dice to be negative. Need to update struct.
             (State::Subtract, Token::Dice(a, _, c)) => {
                 let dice = Dice::new(a, c);
                 roll.dice.push(dice);
