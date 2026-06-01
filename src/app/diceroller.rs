@@ -1,29 +1,39 @@
 use std::io::Error;
 
-use rand::{RngExt, rng};
+use rand::RngExt;
 
 use crate::app::parser::Token;
 
+#[derive(Default)]
 pub struct Die {
     size: u32,
     result: u32,
 }
+#[derive(Default)]
 pub struct Dice {
-    dice: Vec<Die>,
+    dice: Vec<Die>, 
 }
 
 #[derive(Default)]
 pub struct Roll {
     pub input: String,
-    pub dice: Vec<Dice>,
+    pub dice: Dice,
     pub result: u32,
 }
 
+impl Roll {
+    pub fn roll(&mut self) -> u32 {
+        self.dice.roll();
+        self.result = self.dice;
+        return self.result;
+    }
+}
+
 impl Die {
-    fn new(size: u32) -> Self {
+    pub fn new(size: u32) -> Self {
         Self { size, result: 0 }
     }
-    fn roll(&mut self) -> u32 {
+    pub fn roll(&mut self) -> u32 {
         let mut rng = rand::rng();
         let result = rng.random_range(1..self.size);
         self.result = result;
@@ -35,7 +45,7 @@ impl Dice {
     fn new(dice: Vec<Die>) -> Self {
         Self { dice }
     }
-    fn roll(mut self) -> u32 {
+    fn roll(&mut self) -> u32 {
         let mut result: u32 = 0;
         for mut die in self.dice {
             die.roll();
@@ -51,7 +61,7 @@ enum State {
     Subtract,
 }
 
-pub fn roll(input: Vec<Token>) -> Result<Roll, Error> {
+pub fn parse_roll(input: Vec<Token>) -> Result<Roll, Error> {
     let mut roll: Roll = Roll::default();
     let mut state = State::Normal;
 
