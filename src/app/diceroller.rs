@@ -96,7 +96,7 @@ pub fn parse_roll(input: Vec<Token>) -> Result<Roll, Error> {
             }
 
             (State::Subtract, Token::Number(a)) => {
-                roll.modifier += a;
+                roll.modifier -= a;
                 State::Normal
             }
             (State::Subtract, Token::Dice(a, _, c)) => {
