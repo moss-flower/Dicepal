@@ -10,15 +10,15 @@ pub enum ParseError {
 pub enum Token {
     Character(char),
     Operator(char),
-    Number(u32),
-    Dice(u32, char, u32),
+    Number(i32),
+    Dice(i32, char, i32),
 }
 
 #[derive(Debug, PartialEq)]
 pub enum State {
     Start,
-    HeldNumber(u32),
-    HeldNumberAndLetter(u32, char),
+    HeldNumber(i32),
+    HeldNumberAndLetter(i32, char),
     CompletedRoll,
     Invalid,
 }

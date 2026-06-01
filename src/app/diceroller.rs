@@ -1,34 +1,34 @@
 use std::io::Error;
 
-use rand::{Rng, RngExt, rng};
+use rand::{RngExt, rng};
 
 use crate::app::parser::Token;
 
 #[derive(Default)]
 pub struct Dice {
-    count: u32,
-    size: u32,
+    count: i32,
+    size: i32,
 }
 
 #[derive(Default)]
 pub struct Roll {
     pub input: String,
-    pub dice: Dice,
-    pub result: u32,
+    pub dice: Vec<Dice>,
+    pub modifier: i32,
+    pub result: i32,
 }
 
 impl Roll {
-    pub fn roll(&mut self) -> u32 {
-        self.result = self.dice.roll();
+    pub fn roll(&mut self) -> i32 {
         return self.result;
     }
 }
 
 impl Dice {
-    fn new(count: u32, size: u32) -> Self {
+    fn new(count: i32, size: i32) -> Self {
         Self { count, size }
     }
-    pub fn roll(&self) -> u32 {
+    pub fn roll(&self) -> i32 {
         let mut result = 0;
         let mut rng = rng();
 
@@ -45,7 +45,7 @@ enum State {
     Subtract,
 }
 
-pub fn parse_roll(input: Vec<Token>) -> Result<Roll, Error> {
+pub fn roll(input: Vec<Token>) -> Result<Roll, Error> {
     let mut roll: Roll = Roll::default();
     let mut state = State::Normal;
 
@@ -53,11 +53,11 @@ pub fn parse_roll(input: Vec<Token>) -> Result<Roll, Error> {
         state = match (state, token) {
             // Normal State
             (State::Normal, Token::Number(a)) => {
-                roll.result += a;
+                roll.modifier += a;
                 State::Normal
             }
             (State::Normal, Token::Dice(a, _, c)) => {
-                let dice = create_and_roll_dice(a, c);
+                let dice = Dice::new(a, c);
                 roll.dice.push(dice);
                 State::Normal
             }
@@ -74,7 +74,7 @@ pub fn parse_roll(input: Vec<Token>) -> Result<Roll, Error> {
                 State::Normal
             }
             (State::Add, Token::Dice(a, _, c)) => {
-                let dice = create_and_roll_dice(a, c);
+                let dice = Dice::new(a, c);
                 roll.dice.push(dice);
                 State::Normal
             }
@@ -84,7 +84,7 @@ pub fn parse_roll(input: Vec<Token>) -> Result<Roll, Error> {
                 State::Normal
             }
             (State::Subtract, Token::Dice(a, _, c)) => {
-                let dice = create_and_roll_dice(a, c);
+                let dice = Dice::new(a, c);
                 roll.dice.push(dice);
                 State::Normal
             }
@@ -93,14 +93,4 @@ pub fn parse_roll(input: Vec<Token>) -> Result<Roll, Error> {
         };
     }
     return Ok(roll);
-}
-
-fn create_and_roll_dice(count: u32, size: u32) -> Dice {
-    let mut dice: Vec<Die> = vec![];
-    for _ in 0..count {
-        let mut die = Die::new(size);
-        die.roll();
-        dice.push(die);
-    }
-    Dice::new(dice)
 }
