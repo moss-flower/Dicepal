@@ -1,6 +1,6 @@
 use crossterm::event::{KeyCode, KeyEvent};
 
-use crate::app::{command::CommandBar, parser::ParseError};
+use crate::app::{command::CommandBar, diceroller::Roll, parser::ParseError};
 
 mod command;
 mod diceroller;
@@ -10,6 +10,7 @@ mod parser;
 #[derive(Default)]
 pub struct AppState {
     pub should_quit: bool,
+    pub roll_history: Vec<Roll>,
 }
 
 #[derive(Default)]

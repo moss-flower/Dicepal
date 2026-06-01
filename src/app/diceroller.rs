@@ -19,7 +19,9 @@ pub struct Roll {
 }
 
 impl Roll {
-    pub fn roll(&mut self) -> i32 {
+    pub fn execute(&mut self) -> i32 {
+        let roll_result: i32 = self.dice.iter().map(|d| d.roll()).sum();
+        self.result = roll_result + self.modifier;
         return self.result;
     }
 }
@@ -45,7 +47,7 @@ enum State {
     Subtract,
 }
 
-pub fn roll(input: Vec<Token>) -> Result<Roll, Error> {
+pub fn parse_roll(input: Vec<Token>) -> Result<Roll, Error> {
     let mut roll: Roll = Roll::default();
     let mut state = State::Normal;
 
@@ -70,7 +72,7 @@ pub fn roll(input: Vec<Token>) -> Result<Roll, Error> {
             }
 
             (State::Add, Token::Number(a)) => {
-                roll.result += a;
+                roll.modifier += a;
                 State::Normal
             }
             (State::Add, Token::Dice(a, _, c)) => {
@@ -80,7 +82,7 @@ pub fn roll(input: Vec<Token>) -> Result<Roll, Error> {
             }
 
             (State::Subtract, Token::Number(a)) => {
-                roll.result += a;
+                roll.modifier += a;
                 State::Normal
             }
             (State::Subtract, Token::Dice(a, _, c)) => {
@@ -92,5 +94,6 @@ pub fn roll(input: Vec<Token>) -> Result<Roll, Error> {
             _ => State::Normal,
         };
     }
+    roll.execute();
     return Ok(roll);
 }
