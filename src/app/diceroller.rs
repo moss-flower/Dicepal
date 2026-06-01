@@ -1,17 +1,13 @@
 use std::io::Error;
 
-use rand::RngExt;
+use rand::{Rng, RngExt, rng};
 
 use crate::app::parser::Token;
 
 #[derive(Default)]
-pub struct Die {
-    size: u32,
-    result: u32,
-}
-#[derive(Default)]
 pub struct Dice {
-    dice: Vec<Die>, 
+    count: u32,
+    size: u32,
 }
 
 #[derive(Default)]
@@ -23,33 +19,21 @@ pub struct Roll {
 
 impl Roll {
     pub fn roll(&mut self) -> u32 {
-        self.dice.roll();
-        self.result = self.dice;
+        self.result = self.dice.roll();
         return self.result;
     }
 }
 
-impl Die {
-    pub fn new(size: u32) -> Self {
-        Self { size, result: 0 }
-    }
-    pub fn roll(&mut self) -> u32 {
-        let mut rng = rand::rng();
-        let result = rng.random_range(1..self.size);
-        self.result = result;
-        return result;
-    }
-}
-
 impl Dice {
-    fn new(dice: Vec<Die>) -> Self {
-        Self { dice }
+    fn new(count: u32, size: u32) -> Self {
+        Self { count, size }
     }
-    fn roll(&mut self) -> u32 {
-        let mut result: u32 = 0;
-        for mut die in self.dice {
-            die.roll();
-            result += &die.result;
+    pub fn roll(&self) -> u32 {
+        let mut result = 0;
+        let mut rng = rng();
+
+        for _ in 0..self.count - 1 {
+            result += rng.random_range(0..self.size - 1);
         }
         result
     }
