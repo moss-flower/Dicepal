@@ -40,6 +40,12 @@ impl Roll {
     }
 }
 
+impl From<Roll> for (String, String, String) {
+    fn from(value: Roll) -> Self {
+        (value.input, "=".into(), value.result.to_string())
+    }
+}
+
 impl Dice {
     fn new(count: i32, size: i32) -> Self {
         Self { count, size }
